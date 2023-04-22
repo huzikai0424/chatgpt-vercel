@@ -1,4 +1,3 @@
-import qs from "querystring"
 import { defaultEnv } from "~/env"
 const urlBase = defaultEnv.API_BASE_URL || process.env.API_BASE_URL
 const headers = {
@@ -20,7 +19,11 @@ async function request(
 ) {
   let url = urlBase + path
   if (method === "GET" && params) {
-    const queryString = qs.stringify(params)
+    const queryString = Object.keys(params)
+      .map(
+        key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
+      )
+      .join("&")
     url += `?${queryString}`
   }
 

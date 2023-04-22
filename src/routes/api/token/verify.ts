@@ -1,6 +1,5 @@
 import { verifyToken } from "~/utils/api"
-import url from "url"
-import type { APIEvent} from "solid-start/api"
+import type { APIEvent } from "solid-start/api"
 import { json } from "solid-start/api"
 
 export async function POST({ request }: APIEvent) {
