@@ -53,9 +53,12 @@ export default () => {
     if (value.length !== 32) {
       setError("Token输入有误")
     } else {
-      fetch("/api/token/verify", {
+      fetch("https://gpt.yokonsan.com/v1/api/token/verify", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "x-token": "af5eccc5-2d80-474f-86fc-634aabe60f0c",
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({
           token: value
         })
@@ -82,7 +85,15 @@ export default () => {
       (input && input.value) || localStorage.getItem("secretToken")
     if (secretToken && secretToken.length === 32) {
       try {
-        const result = await fetch(`/api/token/usage?token=${secretToken}`)
+        const result = await fetch(
+          `https://gpt.yokonsan.com/v1/api/token/usage?token=${secretToken}`,
+          {
+            headers: {
+              "x-token": "af5eccc5-2d80-474f-86fc-634aabe60f0c",
+              "Content-Type": "application/json"
+            }
+          }
+        )
         const res = await result.json()
         if ([0, 2].includes(res?.data?.status)) {
           setUsage(res.data)
