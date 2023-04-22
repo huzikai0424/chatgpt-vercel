@@ -1,5 +1,5 @@
 import { defaultEnv } from "~/env"
-const urlBase = defaultEnv.API_BASE_URL || process.env.API_BASE_URL
+const urlBase = process.env.API_BASE_URL || defaultEnv.API_BASE_URL
 const headers = {
   "x-token": "af5eccc5-2d80-474f-86fc-634aabe60f0c",
   "Content-Type": "application/json"
