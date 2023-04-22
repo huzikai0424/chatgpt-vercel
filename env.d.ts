@@ -3,6 +3,7 @@ interface ImportMetaEnv {
   CLIENT_SESSION_SETTINGS?: string
   CLIENT_DEFAULT_MESSAGE?: string
   CLIENT_MAX_INPUT_TOKENS?: string
+  API_BASE_URL?: string
   OPENAI_API_BASE_URL?: string
   OPENAI_API_KEY?: string
   TIMEOUT?: string

@@ -23,7 +23,6 @@ if (_) {
     console.error("Error parsing CLIENT_GLOBAL_SETTINGS:", e)
   }
 }
-
 let sessionSettings = { ...defaultEnv.CLIENT_SESSION_SETTINGS }
 _ = import.meta.env.CLIENT_SESSION_SETTINGS
 if (_) {
@@ -137,11 +136,11 @@ function Store() {
 
   const remainingToken = createMemo(
     () =>
-      (store.globalSettings.APIKey
+      store.globalSettings.APIKey
         ? maxInputTokens[store.sessionSettings.APIModel]
-        : defaultEnv.CLIENT_MAX_INPUT_TOKENS[store.sessionSettings.APIModel]) -
-      store.contextToken -
-      store.inputContentToken
+        : defaultEnv.CLIENT_MAX_INPUT_TOKENS[store.sessionSettings.APIModel]
+    // store.contextToken -
+    // store.inputContentToken
   )
   return { store, setStore }
 }

@@ -16,6 +16,7 @@ import {
 } from "~/utils"
 import { Selector, Switch as SwitchButton } from "../Common"
 import { useNavigate } from "solid-start"
+import CheckToken from "~/components/CheckToken"
 
 export const [actionState, setActionState] = createStore({
   showSetting: "none" as "none" | "global" | "session",
@@ -62,20 +63,6 @@ export default function SettingAction() {
       <Switch>
         <Match when={actionState.showSetting === "global"}>
           <div class="<sm:max-h-10em max-h-14em overflow-y-auto">
-            <SettingItem icon="i-ri:lock-password-line" label="网站访问密码">
-              <input
-                type="password"
-                value={store.globalSettings.password}
-                class="input-box"
-                onInput={e => {
-                  setStore(
-                    "globalSettings",
-                    "password",
-                    (e.target as HTMLInputElement).value
-                  )
-                }}
-              />
-            </SettingItem>
             <SettingItem icon="i-carbon:api" label="OpenAI Key">
               <input
                 type="password"
@@ -144,15 +131,15 @@ export default function SettingAction() {
                   {
                     value: "gpt-3.5-turbo",
                     label: "gpt-3.5-turbo(4k)"
-                  },
-                  {
-                    value: "gpt-4",
-                    label: "gpt-4(8k)"
-                  },
-                  {
-                    value: "gpt-4-32k",
-                    label: "gpt-4(32k)"
                   }
+                  // {
+                  //   value: "gpt-4",
+                  //   label: "gpt-4(8k)"
+                  // },
+                  // {
+                  //   value: "gpt-4-32k",
+                  //   label: "gpt-4(32k)"
+                  // }
                 ]}
               />
             </SettingItem>
@@ -204,30 +191,34 @@ export default function SettingAction() {
                 }}
               />
             </SettingItem>
+            <SettingItem icon="i-carbon:keyboard" label="Enter 键发送消息">
+              <SwitchButton
+                checked={store.globalSettings.enterToSend}
+                onChange={e => {
+                  setStore(
+                    "globalSettings",
+                    "enterToSend",
+                    (e.target as HTMLInputElement).checked
+                  )
+                }}
+              />
+            </SettingItem>
           </div>
           <hr class="my-1 bg-slate-5 bg-op-15 border-none h-1px"></hr>
         </Match>
       </Switch>
       <div class="flex items-center justify-between">
-        <div class="flex">
-          <ActionItem
-            onClick={() => {
-              setActionState("showSetting", k =>
-                k !== "global" ? "global" : "none"
-              )
-            }}
-            icon="i-carbon:settings"
-            label="全局设置"
-          />
+        <div class="flex items-center">
           <ActionItem
             onClick={() => {
               setActionState("showSetting", k =>
                 k !== "session" ? "session" : "none"
               )
             }}
-            icon="i-carbon:settings-services"
-            label="对话设置"
+            icon="i-carbon:settings"
+            label="全局设置"
           />
+          <CheckToken />
         </div>
         <Switch
           fallback={

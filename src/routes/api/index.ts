@@ -4,6 +4,7 @@ import type { ChatMessage, Model } from "~/types"
 import { splitKeys, randomKey, fetchWithTimeout } from "~/utils"
 import { defaultEnv } from "~/env"
 import type { APIEvent } from "solid-start/api"
+import { verifyToken, tokenMessages } from "~/utils/api"
 
 export const config = {
   runtime: "edge",
@@ -34,8 +35,7 @@ export const config = {
   ]
 }
 
-export const localKey = process.env.OPENAI_API_KEY || ""
-
+export const OPENAI_API_KEY = process.env.OPENAI_API_KEY || ""
 export const baseURL =
   process.env.NO_GFW !== "false"
     ? defaultEnv.OPENAI_API_BASE_URL
@@ -48,57 +48,68 @@ const timeout = isNaN(+process.env.TIMEOUT!)
   ? defaultEnv.TIMEOUT
   : +process.env.TIMEOUT!
 
-const passwordSet = process.env.PASSWORD || defaultEnv.PASSWORD
-
 export async function POST({ request }: APIEvent) {
   try {
     const body: {
-      messages?: ChatMessage[]
-      key?: string
+      messages: ChatMessage[]
       temperature: number
-      password?: string
       model: Model
+      secretToken: string
     } = await request.json()
-    const { messages, key = localKey, temperature, password, model } = body
-
-    if (passwordSet && password !== passwordSet) {
-      throw new Error("密码错误，请联系网站管理员。")
-    }
-
-    if (!messages?.length) {
-      throw new Error("没有输入任何文字。")
+    const { messages, temperature, model, secretToken } = body
+    if (!secretToken) {
+      return new Response(
+        JSON.stringify({
+          error: {
+            message: "Token不存在，请在下方设置Token"
+          }
+        }),
+        { status: 400 }
+      )
     } else {
-      const content = messages.at(-1)!.content.trim()
-      if (content.startsWith("查询填写的 Key 的余额")) {
-        if (key !== localKey) {
-          const billings = await Promise.all(
-            splitKeys(key).map(k => fetchBilling(k))
+      try {
+        const res = await verifyToken({
+          token: secretToken
+        })
+        if (![0, 2].includes(res?.data?.status)) {
+          return new Response(
+            JSON.stringify({
+              error: {
+                message: "Token无效或额度已用完"
+              }
+            }),
+            { status: 400 }
           )
-          return new Response(await genBillingsTable(billings))
-        } else {
-          throw new Error("没有填写 OpenAI API key，不会查询内置的 Key。")
         }
-      } else if (content.startsWith("sk-")) {
-        const billings = await Promise.all(
-          splitKeys(content).map(k => fetchBilling(k))
+      } catch (error) {
+        return new Response(
+          JSON.stringify({
+            error: {
+              message: "Api 调用失败，请联系管理员。"
+            }
+          }),
+          { status: 400 }
         )
-        return new Response(await genBillingsTable(billings))
       }
     }
-
-    const apiKey = randomKey(splitKeys(key))
-
-    if (!apiKey) throw new Error("没有填写 OpenAI API key，或者 key 填写错误。")
-
+    if (!messages) {
+      return new Response(
+        JSON.stringify({
+          error: {
+            message: "No input text."
+          }
+        }),
+        { status: 400 }
+      )
+    }
     const encoder = new TextEncoder()
     const decoder = new TextDecoder()
-
     const rawRes = await fetchWithTimeout(
       `https://${baseURL}/v1/chat/completions`,
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`
+          Authorization: `Bearer ${OPENAI_API_KEY}`
         },
         timeout,
         method: "POST",
@@ -119,7 +130,6 @@ export async function POST({ request }: APIEvent) {
         { status: 500 }
       )
     })
-
     if (!rawRes.ok) {
       return new Response(rawRes.body, {
         status: rawRes.status,
@@ -129,16 +139,33 @@ export async function POST({ request }: APIEvent) {
 
     const stream = new ReadableStream({
       async start(controller) {
-        const streamParser = (event: ParsedEvent | ReconnectInterval) => {
+        let answer = ""
+        const streamParser = async (event: ParsedEvent | ReconnectInterval) => {
           if (event.type === "event") {
             const data = event.data
             if (data === "[DONE]") {
+              const messages = [
+                ...body.messages,
+                {
+                  role: "assistant",
+                  content: answer
+                }
+              ]
+              try {
+                await tokenMessages({
+                  messages,
+                  token: body.secretToken
+                })
+              } catch (error) {
+                console.error(error)
+              }
               controller.close()
               return
             }
             try {
               const json = JSON.parse(data)
-              const text = json.choices[0].delta?.content
+              const text = json.choices[0].delta?.content || ""
+              answer += text
               const queue = encoder.encode(text)
               controller.enqueue(queue)
             } catch (e) {

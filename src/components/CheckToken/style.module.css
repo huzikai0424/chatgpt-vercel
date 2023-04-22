@@ -1,0 +1,137 @@
+.fallback{
+  color:rgb(16, 163, 127);
+  cursor:pointer;
+}
+.model_root {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+}
+.isDisabled {
+  pointer-events: none;
+}
+.mask {
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transition: opacity 0.4s;
+  transition-timing-function: cubic-bezier(0.2, 0.8, 0.4, 1);
+}
+.model_container {
+  width: 100%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.model_dialog {
+  width: 25rem;
+  padding: 1.25rem;
+  background: #fff;
+  border-radius: 0.3rem;
+  box-sizing: border-box;
+  text-align: center;
+  margin: 1rem;
+}
+.title {
+  font-weight: 700;
+  color: #202123;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+.qrcode {
+  display: inline-block;
+  width: 250px;
+  height: 250px;
+}
+
+.input_box {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+}
+.label {
+  display: inline-block;
+  width: 3rem;
+  margin-right: 0.3rem;
+}
+.desc {
+  font-size: 0.875rem;
+  color: #353740;
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+.input {
+  font-size: 0.875rem;
+  padding: 0.33rem 0.75rem;
+  border: 1px solid #c5c5d2;
+  display: inline-block;
+  color: #353740;
+  font-weight: 400;
+  border-radius: 0.125rem;
+  flex: 1;
+}
+.input:focus {
+  outline: 0;
+  border-color: #10a37f;
+  box-shadow: 0 0 0 0.1rem rgba(16, 163, 127, 0.3);
+}
+.action {
+  display: flex;
+  justify-content: space-between;
+}
+.leftArea{
+  line-height: 2;
+}
+.leftMain{
+  color:rgb(16, 163, 127);
+  cursor: pointer;
+}
+.leftBackup{
+
+}
+.cancel {
+  background-color: #ececf1;
+  color: #353740;
+  font-size: 0.875rem;
+  padding: 0.33rem 0.75rem;
+  display: inline-block;
+  border-radius: 0.125rem;
+  cursor: pointer;
+  user-select: none;
+}
+.cancel:active{
+  background-color: #d9d9e3;
+}
+.confirm {
+  background-color: #10a37f;
+  color: #fff;
+  font-size: 0.875rem;
+  padding: 0.33rem 0.75rem;
+  display: inline-block;
+  border-radius: 0.125rem;
+  cursor: pointer;
+  user-select: none;
+  margin-left: 0.5rem;
+}
+.confirm:active{
+  background-color: #1b5d4a;
+}
+.usage-info{
+  text-align: left;
+}
+.update{
+  color:rgb(16, 163, 127);
+  cursor: pointer;
+  margin-left:5px;
+}
+.error{
+  text-align: left;
+  color:red;
+  display: block;
+}

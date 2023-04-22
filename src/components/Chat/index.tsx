@@ -163,14 +163,14 @@ export default function () {
   }
 
   async function fetchGPT(messages: ChatMessage[]) {
+    const secretToken = localStorage.getItem("secretToken")
     const response = await fetch("/api", {
       method: "POST",
       body: JSON.stringify({
         messages,
-        key: store.globalSettings.APIKey || undefined,
         temperature: store.sessionSettings.APITemperature,
-        password: store.globalSettings.password,
-        model: store.sessionSettings.APIModel
+        model: store.sessionSettings.APIModel,
+        secretToken
       }),
       signal: controller?.signal
     })

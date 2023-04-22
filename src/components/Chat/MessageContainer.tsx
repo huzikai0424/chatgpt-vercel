@@ -94,9 +94,7 @@ export default function ({
             }
           >
             <span class="mx-1 text-slate/40">
-              {`有效上下文+提问 Tokens : ${
-                store.contextToken + store.inputContentToken
-              }(`}
+              {`Tokens : ${store.contextToken + store.inputContentToken}(`}
               <span
                 classList={{
                   "text-red-500": store.remainingToken < 0
@@ -104,7 +102,7 @@ export default function ({
               >
                 {store.remainingToken}
               </span>
-              {`)/$${(store.contextToken$ + store.inputContentToken$).toFixed(
+              {`)/￥${(store.contextToken$ + store.inputContentToken$).toFixed(
                 4
               )}`}
             </span>
