@@ -67,30 +67,31 @@ export async function POST({ request }: APIEvent) {
         { status: 400 }
       )
     } else {
-      // try {
-      //   const res = await verifyToken({
-      //     token: secretToken
-      //   })
-      //   if (![0, 2].includes(res?.data?.status)) {
-      //     return new Response(
-      //       JSON.stringify({
-      //         error: {
-      //           message: "Token无效或额度已用完"
-      //         }
-      //       }),
-      //       { status: 400 }
-      //     )
-      //   }
-      // } catch (error) {
-      //   return new Response(
-      //     JSON.stringify({
-      //       error: {
-      //         message: "Api 调用失败，请联系管理员。"
-      //       }
-      //     }),
-      //     { status: 400 }
-      //   )
-      // }
+      try {
+        const res = await verifyToken({
+          token: secretToken
+        })
+        if (![0, 2].includes(res?.data?.status)) {
+          return new Response(
+            JSON.stringify({
+              error: {
+                message: "Token无效或额度已用完"
+              }
+            }),
+            { status: 400 }
+          )
+        }
+      } catch (error) {
+        console.error(error)
+        return new Response(
+          JSON.stringify({
+            error: {
+              message: "Api 调用失败，请联系管理员。"
+            }
+          }),
+          { status: 400 }
+        )
+      }
     }
     if (!messages) {
       return new Response(

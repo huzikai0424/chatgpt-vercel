@@ -89,7 +89,7 @@ export default function ({
               <span class="mx-1 text-slate/40">
                 {`有效上下文 Tokens : ${
                   store.contextToken
-                }/$${store.contextToken$.toFixed(4)}`}
+                }/￥${store.contextToken$.toFixed(4)}`}
               </span>
             }
           >
