@@ -36,6 +36,8 @@ export const config = {
 }
 
 export const OPENAI_API_KEY = process.env.OPENAI_API_KEY || ""
+const OPENAI_API_KEY_PLUS = process.env.OPENAI_API_KEY_PLUS || ""
+
 export const baseURL =
   process.env.NO_GFW !== "false"
     ? defaultEnv.OPENAI_API_BASE_URL
@@ -110,7 +112,9 @@ export async function POST({ request }: APIEvent) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${OPENAI_API_KEY}`
+          Authorization: `Bearer ${
+            model === "gpt-3.5-turbo" ? OPENAI_API_KEY : OPENAI_API_KEY_PLUS
+          }`
         },
         timeout,
         method: "POST",
@@ -155,6 +159,7 @@ export async function POST({ request }: APIEvent) {
               try {
                 await tokenMessages({
                   messages,
+                  model,
                   token: body.secretToken
                 })
               } catch (error) {

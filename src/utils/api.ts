@@ -1,4 +1,5 @@
 import { defaultEnv } from "~/env"
+import type { Model } from "../types"
 const urlBase = process.env.API_BASE_URL || defaultEnv.API_BASE_URL
 const headers = {
   "x-token": "af5eccc5-2d80-474f-86fc-634aabe60f0c",
@@ -63,6 +64,7 @@ interface ITokenUsed {
 interface ICalcMassage {
   token: string
   messages: any[]
+  model: Model
 }
 export const createBilling = (params: IBillingRules) =>
   request("/v1/api/billing/", RequestMethod.POST, params)

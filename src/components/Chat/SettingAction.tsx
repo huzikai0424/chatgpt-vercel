@@ -131,11 +131,11 @@ export default function SettingAction() {
                   {
                     value: "gpt-3.5-turbo",
                     label: "gpt-3.5-turbo(4k)"
+                  },
+                  {
+                    value: "gpt-4",
+                    label: "gpt-4(8k)"
                   }
-                  // {
-                  //   value: "gpt-4",
-                  //   label: "gpt-4(8k)"
-                  // },
                   // {
                   //   value: "gpt-4-32k",
                   //   label: "gpt-4(32k)"
