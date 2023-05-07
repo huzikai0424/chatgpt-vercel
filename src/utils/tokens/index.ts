@@ -35,7 +35,7 @@ export function countTokensDollar(
     case "gpt-3.5-turbo":
       return (tokens / 1000) * 0.028
     case "gpt-4":
-      return completion ? (tokens / 1000) * 0.03 : (tokens / 1000) * 0.06
+      return completion ? (tokens / 1000) * 0.32 : (tokens / 1000) * 0.64
     case "gpt-4-32k":
       return completion ? (tokens / 1000) * 0.06 : (tokens / 1000) * 0.12
   }
