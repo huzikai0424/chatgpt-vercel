@@ -5,6 +5,7 @@ import { splitKeys, randomKey, fetchWithTimeout } from "~/utils"
 import { defaultEnv } from "~/env"
 import type { APIEvent } from "solid-start/api"
 import { verifyToken, tokenMessages } from "~/utils/api"
+type MODEL = "gpt-3.5-turbo" | "gpt-4"
 
 export const config = {
   runtime: "edge",
@@ -78,6 +79,16 @@ export async function POST({ request }: APIEvent) {
             JSON.stringify({
               error: {
                 message: "Token无效或额度已用完"
+              }
+            }),
+            { status: 400 }
+          )
+        }
+        if ((model as MODEL) === "gpt-4" && res?.data?.status === 2) {
+          return new Response(
+            JSON.stringify({
+              error: {
+                message: "余额不足，不能使用gpt4"
               }
             }),
             { status: 400 }
