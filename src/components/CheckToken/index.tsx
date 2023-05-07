@@ -166,7 +166,7 @@ export default () => {
             </div>
             <div class={styles.action}>
               <div class={styles.leftArea}>
-                <a class={styles.leftMain} href="https://openai.yokonsan.com/">
+                <a class={styles.leftMain} href="https://aiarea.top/">
                   回到主站
                 </a>
               </div>
