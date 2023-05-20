@@ -118,8 +118,9 @@ export async function POST({ request }: APIEvent) {
     }
     const encoder = new TextEncoder()
     const decoder = new TextDecoder()
+    const trueUrl = model === "gpt-4" ? "api.openai-sb.com" : baseURL
     const rawRes = await fetchWithTimeout(
-      `https://${baseURL}/v1/chat/completions`,
+      `https://${trueUrl}/v1/chat/completions`,
       {
         headers: {
           "Content-Type": "application/json",
