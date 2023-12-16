@@ -118,9 +118,9 @@ export async function POST({ request }: APIEvent) {
     }
     const encoder = new TextEncoder()
     const decoder = new TextDecoder()
-    const trueUrl = model === "gpt-4" ? "api.openai-sb.com" : baseURL
+    // const trueUrl = model === "gpt-4" ? "api.openai-sb.com" : 'api.openai-sb.com'
     const rawRes = await fetchWithTimeout(
-      `https://${trueUrl}/v1/chat/completions`,
+      `https://api.openai-sb.com/v1/chat/completions`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -131,7 +131,7 @@ export async function POST({ request }: APIEvent) {
         timeout,
         method: "POST",
         body: JSON.stringify({
-          model: model === "gpt-3.5-turbo" ? "gpt-3.5-turbo-0613" : model,
+          model,
           messages: messages.map(k => ({ role: k.role, content: k.content })),
           temperature,
           stream: true
